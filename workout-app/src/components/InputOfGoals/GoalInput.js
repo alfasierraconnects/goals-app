@@ -7,9 +7,10 @@ const formStyle =
 const inputStyle =
   "rounded-sm p-1 text-black focus:ring focus:outline-none focus:border-violet-500";
 
-export default function GoalInput() {
+export default function GoalInput(props) {
   const [formOpenButton, setformOpenButton] = useState(true);
   const [formState, setFormState] = useState(false);
+  const [goalInput, setGoalInput] = useState("");
 
   const openFormHandler = () => {
     setFormState(true);
@@ -19,6 +20,16 @@ export default function GoalInput() {
   const collapseButtonHandler = () => {
     setFormState(false);
     setformOpenButton(true);
+  };
+
+  const goalInputHandler = (event) => {
+    setGoalInput(event.target.value);
+  };
+
+  const submitDataHandler = (event) => {
+    event.preventDefault();
+    props.sendDataToApp(goalInput);
+    setGoalInput("");
   };
 
   return (
@@ -31,19 +42,27 @@ export default function GoalInput() {
         )}
 
         {formOpenButton || (
-          <form className="form flex flex-col gap-1">
+          <form
+            className="form flex flex-col gap-1"
+            onSubmit={submitDataHandler}
+          >
             <label className="font-bold text-center text-lg">Course Goal</label>
             <input
               className={inputStyle}
               type="text"
+              name="goalInput"
               placeholder="Enter your Goal"
-            ></input>
-            <divForButtons className="flex justify-around mt-4">
+              onChange={goalInputHandler}
+              value={goalInput}
+            />
+            <div className="flex justify-around mt-4">
               <button className={buttonStyle} onClick={collapseButtonHandler}>
                 Collapse
               </button>
-              <button className={buttonStyle}>Add Goal</button>
-            </divForButtons>
+              <button className={buttonStyle} type="submit">
+                Add Goal
+              </button>
+            </div>
           </form>
         )}
       </div>
