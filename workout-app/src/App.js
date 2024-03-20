@@ -17,10 +17,26 @@ function App() {
     });
   };
 
+  const deleteItemHandler = (goalId) => {
+    setCourseGoals((prevState) => {
+      return prevState.filter((el) => el.id !== goalId);
+    });
+  };
+
+  const listContent = () => {
+    if (courseGoals.length === 0) {
+      return <p className="text-center">No goals found. May be add one?</p>;
+    } else {
+      return (
+        <GoalsList courseGoals={courseGoals} onDeleteItem={deleteItemHandler} />
+      );
+    }
+  };
+
   return (
     <div className="bg-slate-950 h-screen text-white">
       <GoalInput sendDataToApp={onDataFromGoalInputHandler} />
-      <GoalsList courseGoals={courseGoals} />
+      {listContent()}
     </div>
   );
 }
